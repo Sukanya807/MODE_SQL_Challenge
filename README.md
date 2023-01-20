@@ -81,4 +81,8 @@ Image Not Available
 
 ![](images/advanced_5.png)
 
+## Conclusion
+
+This SQL script has been written by me. Please note that it is entirely possible to solve these queries in other ways.
+
 

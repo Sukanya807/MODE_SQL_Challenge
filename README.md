@@ -21,4 +21,20 @@ The challenge questions and the data have been obtained from MODE.
 
 ![](images/beginner_1.png)
 
+**2. How many sales reps have the letter 'e' in their names?**
+
+![](images/beginner_2.png)
+
+**3. What is the alphabetically first account name that contains an ampersand ("&")?**
+
+![](images/beginner_3.png)
+
+**4. What is the id of the sales rep that sold the last order in May 2015?**
+
+![](images/beginner_4.png)
+
+**5. How many Sales Reps represent the Northeast Region?**
+
+![](images/beginner_5.png)
+
 

@@ -1,0 +1,75 @@
+-- 1. Which region has the lowest proportion of sales reps to accounts?
+
+SELECT r.name,
+       COUNT( DISTINCT sr.id) AS num_salesrep,
+       COUNT(a.name) AS num_accounts,
+       COUNT( DISTINCT sr.id)/ COUNT(a.name) AS ratio
+FROM sqlchallenge1.accounts AS a
+JOIN sqlchallenge1.sales_reps AS sr
+ON a.sales_rep_id = sr.id
+JOIN sqlchallenge1.region AS r
+ON sr.region_id = r.id
+GROUP BY r.name
+
+
+-- 2. Among sales reps Tia Amato, Delilah Krum and Soraya Fulton, which one had accounts with the greatest total quantity ordered (not USD) in September 2016?
+
+SELECT sr.name,
+       SUM(total)
+FROM sqlchallenge1.orders AS o
+JOIN sqlchallenge1.accounts AS a
+ON o.account_id = a.id
+JOIN sqlchallenge1.sales_reps AS sr
+ON sr.id = a.sales_rep_id
+WHERE occurred_at BETWEEN '2016-09-01 00:00:00' :: TIMESTAMP AND '2016-09-30 23:59:59' :: TIMESTAMP
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+-- 3. Of accounts served by sales reps in the northeast, one account has never bought any posters. Which company?
+
+
+SELECT a.name,
+       SUM(poster_qty)
+FROM sqlchallenge1.orders AS o
+JOIN sqlchallenge1.accounts AS a
+ON o.account_id = a.id
+JOIN sqlchallenge1.sales_reps AS sr
+ON sr.id = a.sales_rep_id
+JOIN sqlchallenge1.region AS r
+ON r.id = sr.region_id
+WHERE r.name = 'Northeast'
+GROUP BY 1
+ORDER BY 2;
+
+
+-- 4. How many accounts have never ordered poster?
+
+SELECT COUNT(*)
+FROM
+(SELECT a.name,
+       SUM(poster_qty) AS poster_orders
+FROM sqlchallenge1.orders AS o
+JOIN sqlchallenge1.accounts AS a
+ON o.account_id = a.id
+GROUP BY a.name
+ORDER BY 2) AS sub
+WHERE poster_orders =0;
+
+
+-- 5. What is the most common first name for Account primary poc's?
+
+SELECT sub.first_name,
+       COUNT(sub.first_name)
+FROM 
+(SELECT primary_poc,
+       LEFT(primary_poc, POSITION(' ' IN primary_poc)-1) AS first_name
+FROM sqlchallenge1.accounts) AS sub
+group by 1
+ORDER BY 2 DESC
+LIMIT 1;
+
+
+
+
+

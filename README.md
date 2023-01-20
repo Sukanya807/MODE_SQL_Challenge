@@ -17,6 +17,6 @@ The challenge questions and the data have been obtained from MODE.
 
 ## BEGINNER CHALLENGE
 
-* 1. List the account name with the longest website URL.*
+**List the account name with the longest website URL**
 
 

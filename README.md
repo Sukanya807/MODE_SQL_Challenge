@@ -19,4 +19,6 @@ The challenge questions and the data have been obtained from MODE.
 
 **1. List the account name with the longest website URL**
 
+![](SQL_Mode_Challenge/images/beginner_1.png)
+
 

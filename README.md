@@ -15,4 +15,8 @@ The challenge questions and the data have been obtained from MODE.
 - sqlchallenge1.region
 - sqlchallenge1.sales_reps
 
+## BEGINNER CHALLENGE
+
+* 1. List the account name with the longest website URL.*
+
 

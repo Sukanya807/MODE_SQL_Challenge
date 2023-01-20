@@ -37,4 +37,26 @@ The challenge questions and the data have been obtained from MODE.
 
 ![](images/beginner_5.png)
 
+## INTERMEDIATE
+
+**1. Which region has the lowest proportion of sales reps to accounts?**
+
+Image Not Available
+
+**2. Among sales reps Tia Amato, Delilah Krum and Soraya Fulton, which one had accounts with the greatest total quantity ordered (not USD) in September 2016?**
+
+![](images/intermediate_2.png)
+
+**3. Of accounts served by sales reps in the northeast, one account has never bought any posters. Which company?
+
+![](images/intermediate_3.png)
+
+**4. How many accounts have never ordered poster?**
+
+![](images/intermediate_4.png)
+
+**5. What is the most common first name for Account primary poc's?**
+
+![](images/intermediate_5.png)
+
 

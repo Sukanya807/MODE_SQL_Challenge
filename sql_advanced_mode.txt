@@ -1,0 +1,88 @@
+-- ADVANCED
+
+-- 1. For the West region, which month had the highest percent of poster orders by count during 2015?
+
+SELECT sub.month,
+       (num_poster_order/SUM(num_poster_order) OVER())*100 AS pct_poster_order
+  
+FROM
+       
+    (SELECT 
+           EXTRACT('month' FROM o.occurred_at) AS month,
+           SUM(o.poster_qty) AS num_poster_order
+    FROM sqlchallenge1.orders AS o
+    JOIN sqlchallenge1.accounts AS a
+    ON o.account_id = a.id
+    JOIN sqlchallenge1.sales_reps AS sr
+    ON sr.id = a.sales_rep_id
+    JOIN sqlchallenge1.region AS r
+    ON r.id = sr.region_id
+    WHERE r.name = 'West' AND EXTRACT('year' FROM o.occurred_at) ='2015'
+    GROUP BY 1) AS sub
+ORDER BY 2 DESC;
+
+-- 2. Starting from the time of their first order, which sales rep reached $100,000 in total sales the fastest in terms of time taken.
+
+SELECT sub_1.*
+FROM 
+    (SELECT sub.*,
+           ROW_NUMBER() OVER (PARTITION BY sub.sales_rep_id ORDER BY total_sales) AS row_num
+    FROM
+        (SELECT a.sales_rep_id,
+               o.occurred_at,
+               SUM(total_amt_usd) OVER (PARTITION BY a.sales_rep_id ORDER BY occurred_at) AS total_sales,
+               occurred_at - MIN(occurred_at) OVER (PARTITION BY a.sales_rep_id) AS time_diff
+        FROM sqlchallenge1.orders AS o
+        JOIN sqlchallenge1.accounts AS a
+        ON o.account_id = a.id) AS sub
+    WHERE sub.total_sales >=100000) AS sub_1
+WHERE row_num = '1'
+ORDER BY time_diff
+LIMIT 1;
+
+-- 3.What is the name of the sales rep who went the longest time between their first and second order?
+
+SELECT sub.*
+FROM
+    (SELECT sr.name,
+           occurred_at - LAG(occurred_at) OVER (PARTITION BY sr.name ORDER BY occurred_at) AS time_diff,
+           ROW_NUMBER() OVER (PARTITION BY sr.name) AS row_num
+    FROM sqlchallenge1.orders AS o
+    JOIN sqlchallenge1.accounts AS a
+    ON o.account_id = a.id
+    JOIN sqlchallenge1.sales_reps AS sr
+    ON sr.id = a.sales_rep_id) AS sub
+WHERE row_num = '2'
+ORDER BY time_diff DESC
+LIMIT 1;
+
+-- 4. How many Sales Reps had atleast 9 orders before surpassing $ 10K cumulative sales?
+
+SELECT COUNT(*)
+FROM 
+    (SELECT sub_1.sales_rep_id,
+           COUNT(*) AS num_orders
+    FROM
+        (SELECT sub.*
+        FROM
+            (SELECT a.sales_rep_id,
+                   occurred_at,
+                   SUM(total_amt_usd) OVER (PARTITION BY a.sales_rep_id ORDER BY occurred_at) AS total_sum,
+                   ROW_NUMBER() OVER (PARTITION BY sales_rep_id ORDER BY occurred_at) AS row_num
+            FROM sqlchallenge1.orders AS o
+            JOIN sqlchallenge1.accounts AS a
+            ON o.account_id = a.id) AS sub
+        WHERE total_sum <10000) AS sub_1
+    GROUP BY sub_1.sales_rep_id) AS sub_2
+WHERE sub_2.num_orders >=9;
+
+
+-- 5. What two-calender-day period had the largest dollar amount of purchases?
+
+SELECT DATE_TRUNC('day', occurred_at) AS date,
+       SUM(total_amt_usd)
+FROM sqlchallenge1.orders
+GROUP BY 1
+ORDER BY sum DESC
+
+
